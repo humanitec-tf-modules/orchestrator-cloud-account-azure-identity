@@ -10,9 +10,9 @@ output "managed_identity_client_id" {
   value       = local.managed_identity_client_id
   description = "Client ID of the managed identity used by the Cloud Account"
 }
-output "managed_identity_principal_id" {
-  value       = local.managed_identity_principal_id
-  description = "Principal (object) ID of the managed identity used by the Cloud Account. Use it to assign Azure roles to the identity"
+output "managed_identity_object_id" {
+  value       = local.managed_identity_object_id
+  description = "Object ID (principal ID) of the managed identity used by the Cloud Account, i.e. the object ID of its service principal in Microsoft Entra ID. Use it as the principal ID to assign Azure roles to the identity"
 }
 output "azure_tenant_id" {
   value       = local.managed_identity_tenant_id

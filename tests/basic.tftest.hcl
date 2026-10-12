@@ -175,8 +175,8 @@ run "test_existing_managed_identity" {
   }
 
   assert {
-    condition     = output.managed_identity_principal_id == "22222222-2222-2222-2222-222222222222"
-    error_message = "The managed_identity_principal_id output must be the principal ID of the existing managed identity"
+    condition     = output.managed_identity_object_id == "22222222-2222-2222-2222-222222222222"
+    error_message = "The managed_identity_object_id output must be the object ID of the existing managed identity"
   }
 
   assert {

@@ -87,13 +87,13 @@ The Cloud Account works only once the federated identity credential exists.
 
 ### Assign Azure roles to the managed identity
 
-The module does not assign any Azure roles. Grant the managed identity the permissions it needs on the target Azure services using the `managed_identity_principal_id` output, e.g.:
+The module does not assign any Azure roles. Grant the managed identity the permissions it needs on the target Azure services using the `managed_identity_object_id` output, e.g.:
 
 ```hcl
 resource "azurerm_role_assignment" "aks_cluster_user" {
   scope                = azurerm_kubernetes_cluster.my_cluster.id
   role_definition_name = "Azure Kubernetes Service Cluster User Role"
-  principal_id         = module.cloud_account_azure_identity.managed_identity_principal_id
+  principal_id         = module.cloud_account_azure_identity.managed_identity_object_id
   principal_type       = "ServicePrincipal"
 }
 ```
@@ -104,7 +104,7 @@ For access to an AKS cluster, refer to the [Kubernetes](https://developer.humani
 ## Requirements
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.11.0 |
 | <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 4.78 |
 | <a name="requirement_humanitec"></a> [humanitec](#requirement\_humanitec) | ~> 1.0 |
@@ -117,7 +117,7 @@ No modules.
 ## Resources
 
 | Name | Type |
-|------|------|
+| ---- | ---- |
 | [azurerm_federated_identity_credential.humanitec](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/federated_identity_credential) | resource |
 | [azurerm_user_assigned_identity.cloud_account_identity](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/user_assigned_identity) | resource |
 | [humanitec_resource_account.azure_identity](https://registry.terraform.io/providers/humanitec/humanitec/latest/docs/resources/resource_account) | resource |
@@ -128,7 +128,7 @@ No modules.
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+| ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_cloud_account_id"></a> [cloud\_account\_id](#input\_cloud\_account\_id) | ID for the Cloud Account. If not set, the module generates an ID with a random suffix | `string` | `null` | no |
 | <a name="input_cloud_account_name"></a> [cloud\_account\_name](#input\_cloud\_account\_name) | Name for the Cloud Account. If not set, will be set to the value of `cloud_account_id` | `string` | `null` | no |
 | <a name="input_federated_identity_credential_create"></a> [federated\_identity\_credential\_create](#input\_federated\_identity\_credential\_create) | Whether to create the federated identity credential trusting the Humanitec OIDC provider on the managed identity. Set to `false` if you manage the credential yourself. Use the `federated_identity_credential` output to configure it | `bool` | `true` | no |
@@ -144,7 +144,7 @@ No modules.
 ## Outputs
 
 | Name | Description |
-|------|-------------|
+| ---- | ----------- |
 | <a name="output_azure_tenant_id"></a> [azure\_tenant\_id](#output\_azure\_tenant\_id) | ID of the Azure tenant of the managed identity |
 | <a name="output_cloud_account_id"></a> [cloud\_account\_id](#output\_cloud\_account\_id) | ID of the Orchestrator Cloud Account |
 | <a name="output_cloud_account_name"></a> [cloud\_account\_name](#output\_cloud\_account\_name) | Name of the Orchestrator Cloud Account |
@@ -153,5 +153,5 @@ No modules.
 | <a name="output_managed_identity_client_id"></a> [managed\_identity\_client\_id](#output\_managed\_identity\_client\_id) | Client ID of the managed identity used by the Cloud Account |
 | <a name="output_managed_identity_id"></a> [managed\_identity\_id](#output\_managed\_identity\_id) | Resource ID of the managed identity used by the Cloud Account |
 | <a name="output_managed_identity_name"></a> [managed\_identity\_name](#output\_managed\_identity\_name) | Name of the managed identity used by the Cloud Account |
-| <a name="output_managed_identity_principal_id"></a> [managed\_identity\_principal\_id](#output\_managed\_identity\_principal\_id) | Principal (object) ID of the managed identity used by the Cloud Account. Use it to assign Azure roles to the identity |
+| <a name="output_managed_identity_object_id"></a> [managed\_identity\_object\_id](#output\_managed\_identity\_object\_id) | Object ID of the managed identity used by the Cloud Account, i.e. the object ID of its service principal in Microsoft Entra ID. Use it as the principal ID to assign Azure roles to the identity |
 <!-- END_TF_DOCS -->

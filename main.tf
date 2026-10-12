@@ -12,11 +12,11 @@ locals {
   federated_credential_name = var.federated_identity_credential_name != null ? var.federated_identity_credential_name : "humanitec-${local.cloud_account_id}"
 
   # Attributes of the managed identity, either created by the module or passed in
-  managed_identity_id           = var.managed_identity_create ? azurerm_user_assigned_identity.cloud_account_identity[0].id : var.managed_identity_id
-  managed_identity_name         = var.managed_identity_create ? azurerm_user_assigned_identity.cloud_account_identity[0].name : data.azurerm_user_assigned_identity.existing[0].name
-  managed_identity_client_id    = var.managed_identity_create ? azurerm_user_assigned_identity.cloud_account_identity[0].client_id : data.azurerm_user_assigned_identity.existing[0].client_id
-  managed_identity_principal_id = var.managed_identity_create ? azurerm_user_assigned_identity.cloud_account_identity[0].principal_id : data.azurerm_user_assigned_identity.existing[0].principal_id
-  managed_identity_tenant_id    = var.managed_identity_create ? azurerm_user_assigned_identity.cloud_account_identity[0].tenant_id : data.azurerm_user_assigned_identity.existing[0].tenant_id
+  managed_identity_id        = var.managed_identity_create ? azurerm_user_assigned_identity.cloud_account_identity[0].id : var.managed_identity_id
+  managed_identity_name      = var.managed_identity_create ? azurerm_user_assigned_identity.cloud_account_identity[0].name : data.azurerm_user_assigned_identity.existing[0].name
+  managed_identity_client_id = var.managed_identity_create ? azurerm_user_assigned_identity.cloud_account_identity[0].client_id : data.azurerm_user_assigned_identity.existing[0].client_id
+  managed_identity_object_id = var.managed_identity_create ? azurerm_user_assigned_identity.cloud_account_identity[0].principal_id : data.azurerm_user_assigned_identity.existing[0].principal_id
+  managed_identity_tenant_id = var.managed_identity_create ? azurerm_user_assigned_identity.cloud_account_identity[0].tenant_id : data.azurerm_user_assigned_identity.existing[0].tenant_id
 
   # Federated identity credential settings for the Humanitec OIDC provider
   federated_credential = {

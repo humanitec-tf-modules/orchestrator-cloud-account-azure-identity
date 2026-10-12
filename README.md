@@ -103,7 +103,7 @@ For access to an AKS cluster, refer to the [Kubernetes](https://developer.humani
 ## Requirements
 
 | Name | Version |
-| ---- | ------- |
+|------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.11.0 |
 | <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 4.78 |
 | <a name="requirement_humanitec"></a> [humanitec](#requirement\_humanitec) | ~> 1.0 |
@@ -116,7 +116,7 @@ No modules.
 ## Resources
 
 | Name | Type |
-| ---- | ---- |
+|------|------|
 | [azurerm_federated_identity_credential.humanitec](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/federated_identity_credential) | resource |
 | [azurerm_user_assigned_identity.cloud_account_identity](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/user_assigned_identity) | resource |
 | [humanitec_resource_account.azure_identity](https://registry.terraform.io/providers/humanitec/humanitec/latest/docs/resources/resource_account) | resource |
@@ -126,7 +126,7 @@ No modules.
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-| ---- | ----------- | ---- | ------- | :------: |
+|------|-------------|------|---------|:--------:|
 | <a name="input_cloud_account_id"></a> [cloud\_account\_id](#input\_cloud\_account\_id) | ID for the Cloud Account. If not set, the module generates an ID with a random suffix | `string` | `null` | no |
 | <a name="input_cloud_account_name"></a> [cloud\_account\_name](#input\_cloud\_account\_name) | Name for the Cloud Account. If not set, will be set to the value of `cloud_account_id` | `string` | `null` | no |
 | <a name="input_federated_identity_credential_create"></a> [federated\_identity\_credential\_create](#input\_federated\_identity\_credential\_create) | Whether to create the federated identity credential trusting the Humanitec OIDC provider on the managed identity. Set to `false` if you manage the credential yourself. Use the `federated_identity_credential` output to configure it | `bool` | `true` | no |
@@ -142,7 +142,7 @@ No modules.
 ## Outputs
 
 | Name | Description |
-| ---- | ----------- |
+|------|-------------|
 | <a name="output_azure_tenant_id"></a> [azure\_tenant\_id](#output\_azure\_tenant\_id) | ID of the Azure tenant of the managed identity |
 | <a name="output_cloud_account_id"></a> [cloud\_account\_id](#output\_cloud\_account\_id) | ID of the Orchestrator Cloud Account |
 | <a name="output_cloud_account_name"></a> [cloud\_account\_name](#output\_cloud\_account\_name) | Name of the Orchestrator Cloud Account |

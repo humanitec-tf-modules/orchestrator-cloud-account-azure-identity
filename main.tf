@@ -34,8 +34,14 @@ resource "azurerm_user_assigned_identity" "cloud_account_identity" {
   count               = var.managed_identity_create ? 1 : 0
   name                = var.managed_identity_name != null ? var.managed_identity_name : "humanitec-${local.cloud_account_id}"
   resource_group_name = var.managed_identity_resource_group_name
-  location            = var.managed_identity_location
+  location            = var.managed_identity_location != null ? var.managed_identity_location : data.azurerm_resource_group.managed_identity[0].location
   tags                = var.managed_identity_tags
+}
+
+# Resource group of the new managed identity. Read only if its location is needed as the default
+data "azurerm_resource_group" "managed_identity" {
+  count = var.managed_identity_create && var.managed_identity_location == null ? 1 : 0
+  name  = var.managed_identity_resource_group_name
 }
 
 # Existing managed identity. Read only if the module does not create the identity

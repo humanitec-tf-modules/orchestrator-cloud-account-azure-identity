@@ -34,7 +34,7 @@ variable "managed_identity_name" {
 }
 variable "managed_identity_resource_group_name" {
   type        = string
-  description = "The name of an existing resource group to create the managed identity in. Required if `managed_identity_create` is `true`, must not be set otherwise"
+  description = "The name of an existing resource group to create the managed identity in. Its location is the default for `managed_identity_location`. Required if `managed_identity_create` is `true`, must not be set otherwise"
   nullable    = true
   default     = null
 
@@ -45,13 +45,13 @@ variable "managed_identity_resource_group_name" {
 }
 variable "managed_identity_location" {
   type        = string
-  description = "The Azure region to create the managed identity in, e.g. `westeurope`. Required if `managed_identity_create` is `true`, must not be set otherwise"
+  description = "The Azure region to create the managed identity in, e.g. `westeurope`. If not set, the module uses the location of the resource group `managed_identity_resource_group_name`. Only used if `managed_identity_create` is `true`"
   nullable    = true
   default     = null
 
   validation {
-    condition     = var.managed_identity_create ? var.managed_identity_location != null : var.managed_identity_location == null
-    error_message = "managed_identity_location must be set if managed_identity_create is true, and must not be set otherwise"
+    condition     = var.managed_identity_create || var.managed_identity_location == null
+    error_message = "managed_identity_location must not be set if managed_identity_create is false"
   }
 }
 variable "managed_identity_tags" {

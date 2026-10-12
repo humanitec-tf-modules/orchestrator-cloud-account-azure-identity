@@ -3,6 +3,12 @@
 # of a new managed identity) available to assertions.
 
 mock_provider "azurerm" {
+  mock_data "azurerm_resource_group" {
+    defaults = {
+      location = "germanywestcentral"
+    }
+  }
+
   mock_resource "azurerm_user_assigned_identity" {
     defaults = {
       id           = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/my-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/humanitec-azure-identity-abcd1234"
@@ -29,7 +35,6 @@ run "test_all_default" {
   variables {
     humanitec_org_id                     = "my-org"
     managed_identity_resource_group_name = "my-rg"
-    managed_identity_location            = "westeurope"
   }
 
   assert {
@@ -50,6 +55,11 @@ run "test_all_default" {
   assert {
     condition     = azurerm_user_assigned_identity.cloud_account_identity[0].name == "humanitec-azure-identity-abcd1234"
     error_message = "The managed identity name must default to 'humanitec-' plus the Cloud Account ID"
+  }
+
+  assert {
+    condition     = azurerm_user_assigned_identity.cloud_account_identity[0].location == "germanywestcentral"
+    error_message = "The managed identity location must default to the location of the resource group"
   }
 
   assert {

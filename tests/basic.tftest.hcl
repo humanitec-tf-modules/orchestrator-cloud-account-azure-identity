@@ -11,6 +11,12 @@ mock_provider "azurerm" {
     }
   }
 
+  mock_data "azurerm_resource_group" {
+    defaults = {
+      location = "germanywestcentral"
+    }
+  }
+
   mock_data "azurerm_user_assigned_identity" {
     defaults = {
       client_id    = "11111111-1111-1111-1111-111111111111"
@@ -67,8 +73,31 @@ run "test_federated_identity_credential" {
   }
 
   assert {
+    condition     = length(data.azurerm_resource_group.managed_identity) == 0
+    error_message = "The module must not read the resource group if managed_identity_location is set"
+  }
+
+  assert {
     condition     = output.federated_identity_credential == { issuer = "https://idtoken.humanitec.io", subject = "my-org/my-cloud-account", audience = "api://AzureADTokenExchange" }
     error_message = "The federated_identity_credential output must contain issuer, subject, and audience"
+  }
+}
+
+run "test_default_location" {
+  command = plan
+
+  variables {
+    managed_identity_resource_group_name = "my-rg"
+  }
+
+  assert {
+    condition     = data.azurerm_resource_group.managed_identity[0].name == var.managed_identity_resource_group_name
+    error_message = "The module must read the resource group managed_identity_resource_group_name if managed_identity_location is not set"
+  }
+
+  assert {
+    condition     = azurerm_user_assigned_identity.cloud_account_identity[0].location == "germanywestcentral"
+    error_message = "The managed identity location must default to the location of the resource group"
   }
 }
 
@@ -182,12 +211,11 @@ run "test_no_federated_identity_credential" {
   }
 }
 
-run "test_new_managed_identity_requires_resource_group_and_location" {
+run "test_new_managed_identity_requires_resource_group" {
   command = plan
 
   expect_failures = [
     var.managed_identity_resource_group_name,
-    var.managed_identity_location,
   ]
 }
 

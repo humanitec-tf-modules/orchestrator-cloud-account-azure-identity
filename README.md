@@ -51,12 +51,9 @@ The managed identity is created in the location of the resource group.
 The module creates the federated identity credential on the existing managed identity. It reads the identity to obtain its client ID and tenant ID, which requires read access to the identity.
 
 ```hcl
-module "cloud_account_azure_identity" {
-  source = "github.com/humanitec-tf-modules/orchestrator-cloud-account-azure-identity?ref=vX.Y.Z"
-  # ...
+  humanitec_org_id        = "my-org"
   managed_identity_create = false
   managed_identity_id     = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/my-resource-group/providers/Microsoft.ManagedIdentity/userAssignedIdentities/my-identity"
-}
 ```
 
 A managed identity supports a [limited number](https://learn.microsoft.com/en-us/entra/workload-id/workload-identity-federation-considerations#general-federated-identity-credential-considerations) of federated identity credentials. Each Cloud Account using the same managed identity adds one credential.
@@ -76,6 +73,7 @@ resource "azurerm_federated_identity_credential" "mine" {
 module "cloud_account_azure_identity" {
   source = "github.com/humanitec-tf-modules/orchestrator-cloud-account-azure-identity?ref=vX.Y.Z"
   # ...
+  humanitec_org_id                     = "my-org"
   cloud_account_id                     = "my-azure-identity-account"
   managed_identity_create              = false
   managed_identity_id                  = azurerm_user_assigned_identity.mine.id

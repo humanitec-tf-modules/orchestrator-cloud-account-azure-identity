@@ -25,8 +25,8 @@ locals {
     audience = "api://AzureADTokenExchange"
   }
 
-  # Resource group and name of an existing managed identity, parsed from its resource ID
-  existing_identity_id_parts = var.managed_identity_id != null ? regex("(?i)^/subscriptions/[^/]+/resourceGroups/(?P<resource_group_name>[^/]+)/providers/Microsoft\\.ManagedIdentity/userAssignedIdentities/(?P<name>[^/]+)$", var.managed_identity_id) : null
+  # Subscription, resource group, and name of an existing managed identity, parsed from its resource ID
+  existing_identity_id_parts = var.managed_identity_id != null ? regex("(?i)^/subscriptions/(?P<subscription_id>[^/]+)/resourceGroups/(?P<resource_group_name>[^/]+)/providers/Microsoft\\.ManagedIdentity/userAssignedIdentities/(?P<name>[^/]+)$", var.managed_identity_id) : null
 }
 
 # Managed identity used via the Cloud Account. Create only if requested
@@ -44,11 +44,24 @@ data "azurerm_resource_group" "managed_identity" {
   name  = var.managed_identity_resource_group_name
 }
 
+# Subscription of the azurerm provider. Read only to verify an existing managed identity is located in it
+data "azurerm_client_config" "current" {
+  count = var.managed_identity_create ? 0 : 1
+}
+
 # Existing managed identity. Read only if the module does not create the identity
 data "azurerm_user_assigned_identity" "existing" {
   count               = var.managed_identity_create ? 0 : 1
   name                = local.existing_identity_id_parts.name
   resource_group_name = local.existing_identity_id_parts.resource_group_name
+
+  lifecycle {
+    # The data source reads from the subscription of the azurerm provider, which must therefore match managed_identity_id
+    precondition {
+      condition     = lower(local.existing_identity_id_parts.subscription_id) == lower(data.azurerm_client_config.current[0].subscription_id)
+      error_message = "managed_identity_id must be located in the subscription of the azurerm provider passed in to the module (${data.azurerm_client_config.current[0].subscription_id}), but is located in subscription ${local.existing_identity_id_parts.subscription_id}"
+    }
+  }
 }
 
 # Federated identity credential trusting the Humanitec OIDC provider. Create only if requested

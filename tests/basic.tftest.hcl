@@ -17,6 +17,12 @@ mock_provider "azurerm" {
     }
   }
 
+  mock_data "azurerm_client_config" {
+    defaults = {
+      subscription_id = "00000000-0000-0000-0000-000000000000"
+    }
+  }
+
   mock_data "azurerm_user_assigned_identity" {
     defaults = {
       client_id    = "11111111-1111-1111-1111-111111111111"
@@ -262,6 +268,19 @@ run "test_new_managed_identity_rejects_id" {
 
   expect_failures = [
     var.managed_identity_id,
+  ]
+}
+
+run "test_existing_managed_identity_in_other_subscription" {
+  command = plan
+
+  variables {
+    managed_identity_create = false
+    managed_identity_id     = "/subscriptions/99999999-9999-9999-9999-999999999999/resourceGroups/my-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/my-existing-identity"
+  }
+
+  expect_failures = [
+    data.azurerm_user_assigned_identity.existing,
   ]
 }
 

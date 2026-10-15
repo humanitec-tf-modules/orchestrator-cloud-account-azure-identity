@@ -10,6 +10,7 @@ variable "cloud_account_id" {
   default     = null
 
   validation {
+    # Using a ternary instead of "||" to support Terraform <= 1.11 which does not yet short-circuit logical operators
     condition     = var.cloud_account_id == null ? true : length(var.cloud_account_id) >= 2 && length(var.cloud_account_id) <= 63
     error_message = "cloud_account_id must be between 2 and 63 characters long"
   }

@@ -27,7 +27,7 @@ output "cloud_account_name" {
   description = "Name of the Orchestrator Cloud Account"
 }
 output "federated_identity_credential_id" {
-  value       = var.federated_identity_credential_create ? azurerm_federated_identity_credential.humanitec[0].id : null
+  value       = one(azurerm_federated_identity_credential.humanitec[*].id)
   description = "Resource ID of the federated identity credential created by the module, or `null` if `federated_identity_credential_create` is `false`"
 }
 output "federated_identity_credential" {

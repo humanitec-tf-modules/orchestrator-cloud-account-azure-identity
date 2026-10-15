@@ -37,6 +37,8 @@ module "cloud_account_azure_identity" {
 }
 ```
 
+The module also uses the `hashicorp/random` provider internally. It requires no configuration and is inherited implicitly, so you do not need to pass it in.
+
 ### Create managed identity and federated identity credential, let module generate names
 
 The managed identity is created in the location of the resource group.

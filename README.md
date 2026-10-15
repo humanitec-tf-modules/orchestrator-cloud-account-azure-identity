@@ -100,7 +100,7 @@ module "cloud_account_azure_identity" {
     humanitec = humanitec
     azurerm   = azurerm
   }
-  
+
   humanitec_org_id                     = "my-org"
   cloud_account_id                     = "my-azure-identity-account"
   managed_identity_create              = false

@@ -76,6 +76,9 @@ module "cloud_account_azure_identity" {
 
 A managed identity supports a [limited number](https://learn.microsoft.com/en-us/entra/workload-id/workload-identity-federation-considerations#general-federated-identity-credential-considerations) of federated identity credentials. Each Cloud Account using the same managed identity adds one credential.
 
+> [!NOTE]
+> **Handling concurrent credential creation**: Azure [rejects concurrent creation](https://learn.microsoft.com/en-us/entra/workload-id/workload-identity-federation-considerations#concurrent-updates-arent-supported-user-assigned-managed-identities) of federated identity credentials on the same managed identity. When you are making parallel calls to this module for the same existing managed identity and encounter this issue, ensure sequential execution by using `-parallelism=1` on the `apply` or chain the module calls with `depends_on`.
+
 ### Bring existing managed identity and federated identity credential
 
 ```hcl

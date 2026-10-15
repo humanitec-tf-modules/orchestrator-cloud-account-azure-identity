@@ -77,7 +77,7 @@ variable "managed_identity_id" {
   }
 
   validation {
-    condition     = var.managed_identity_id == null || can(regex("(?i)^/subscriptions/[^/]+/resourceGroups/[^/]+/providers/Microsoft\\.ManagedIdentity/userAssignedIdentities/[^/]+$", var.managed_identity_id))
+    condition     = var.managed_identity_id == null || can(regex(local.managed_identity_id_pattern, var.managed_identity_id))
     error_message = "managed_identity_id must be a managed identity resource ID like /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/my-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/my-identity"
   }
 }

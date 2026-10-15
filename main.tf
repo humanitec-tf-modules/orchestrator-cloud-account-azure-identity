@@ -25,8 +25,11 @@ locals {
     audience = "api://AzureADTokenExchange"
   }
 
+  # Pattern for a managed identity resource ID, also used by the managed_identity_id validation
+  managed_identity_id_pattern = "(?i)^/subscriptions/(?P<subscription_id>[^/]+)/resourceGroups/(?P<resource_group_name>[^/]+)/providers/Microsoft\\.ManagedIdentity/userAssignedIdentities/(?P<name>[^/]+)$"
+
   # Subscription, resource group, and name of an existing managed identity, parsed from its resource ID
-  existing_identity_id_parts = var.managed_identity_id != null ? regex("(?i)^/subscriptions/(?P<subscription_id>[^/]+)/resourceGroups/(?P<resource_group_name>[^/]+)/providers/Microsoft\\.ManagedIdentity/userAssignedIdentities/(?P<name>[^/]+)$", var.managed_identity_id) : null
+  existing_identity_id_parts = var.managed_identity_id != null ? regex(local.managed_identity_id_pattern, var.managed_identity_id) : null
 }
 
 # Managed identity used via the Cloud Account. Create only if requested

@@ -156,7 +156,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_cloud_account_id"></a> [cloud\_account\_id](#input\_cloud\_account\_id) | ID for the Cloud Account. If not set, the module generates an ID with a random suffix | `string` | `null` | no |
+| <a name="input_cloud_account_id"></a> [cloud\_account\_id](#input\_cloud\_account\_id) | ID for the Cloud Account. Must be 2–63 chars, only lowercase letters, digits and single hyphens, no leading/trailing hyphen. If not set, the module generates an ID with a random suffix | `string` | `null` | no |
 | <a name="input_cloud_account_name"></a> [cloud\_account\_name](#input\_cloud\_account\_name) | Name for the Cloud Account. If not set, will be set to the value of `cloud_account_id` | `string` | `null` | no |
 | <a name="input_federated_identity_credential_create"></a> [federated\_identity\_credential\_create](#input\_federated\_identity\_credential\_create) | Whether to create the federated identity credential trusting the Humanitec OIDC provider on the managed identity. Set to `false` if you manage the credential yourself. Use the `federated_identity_credential` output to configure it | `bool` | `true` | no |
 | <a name="input_federated_identity_credential_name"></a> [federated\_identity\_credential\_name](#input\_federated\_identity\_credential\_name) | The name for the federated identity credential created by the module. If not set, the module generates a name including the cloud account id. Only used if `federated_identity_credential_create` is `true` | `string` | `null` | no |

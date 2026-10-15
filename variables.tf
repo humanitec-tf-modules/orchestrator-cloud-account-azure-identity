@@ -67,7 +67,7 @@ variable "managed_identity_tags" {
 }
 variable "managed_identity_id" {
   type        = string
-  description = "The resource ID of an existing user-assigned managed identity used via the Cloud Account. The module reads the identity to obtain its client and tenant ID. Required if `managed_identity_create` is `false`, must not be set otherwise"
+  description = "The resource ID of an existing user-assigned managed identity used via the Cloud Account. It must be located in the subscription of the `azurerm` provider that is passed in to the module. The module reads the identity to obtain its client ID and tenant ID. Required if `managed_identity_create` is `false`, must not be set otherwise"
   nullable    = true
   default     = null
 

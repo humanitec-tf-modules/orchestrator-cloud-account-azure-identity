@@ -311,3 +311,126 @@ run "test_no_federated_identity_credential_rejects_name" {
     var.federated_identity_credential_name,
   ]
 }
+
+run "test_cloud_account_id_valid_min_length" {
+  command = plan
+
+  variables {
+    cloud_account_id                     = "a1"
+    managed_identity_resource_group_name = "my-rg"
+    managed_identity_location            = "westeurope"
+  }
+
+  assert {
+    condition     = humanitec_resource_account.azure_identity.id == "a1"
+    error_message = "A 2 character cloud_account_id must be accepted"
+  }
+}
+
+run "test_cloud_account_id_valid_max_length" {
+  command = plan
+
+  variables {
+    # 63 characters
+    cloud_account_id                     = "a-0123456789-0123456789-0123456789-0123456789-0123456789-012345"
+    managed_identity_resource_group_name = "my-rg"
+    managed_identity_location            = "westeurope"
+  }
+
+  assert {
+    condition     = humanitec_resource_account.azure_identity.id == var.cloud_account_id
+    error_message = "A 63 character cloud_account_id with single hyphens must be accepted"
+  }
+}
+
+run "test_cloud_account_id_too_short" {
+  command = plan
+
+  variables {
+    cloud_account_id                     = "a"
+    managed_identity_resource_group_name = "my-rg"
+  }
+
+  expect_failures = [
+    var.cloud_account_id,
+  ]
+}
+
+run "test_cloud_account_id_too_long" {
+  command = plan
+
+  variables {
+    # 64 characters
+    cloud_account_id                     = "a-0123456789-0123456789-0123456789-0123456789-0123456789-0123456"
+    managed_identity_resource_group_name = "my-rg"
+  }
+
+  expect_failures = [
+    var.cloud_account_id,
+  ]
+}
+
+run "test_cloud_account_id_rejects_uppercase" {
+  command = plan
+
+  variables {
+    cloud_account_id                     = "My-cloud-account"
+    managed_identity_resource_group_name = "my-rg"
+  }
+
+  expect_failures = [
+    var.cloud_account_id,
+  ]
+}
+
+run "test_cloud_account_id_rejects_invalid_characters" {
+  command = plan
+
+  variables {
+    cloud_account_id                     = "my_cloud.account"
+    managed_identity_resource_group_name = "my-rg"
+  }
+
+  expect_failures = [
+    var.cloud_account_id,
+  ]
+}
+
+run "test_cloud_account_id_rejects_leading_hyphen" {
+  command = plan
+
+  variables {
+    cloud_account_id                     = "-my-cloud-account"
+    managed_identity_resource_group_name = "my-rg"
+  }
+
+  expect_failures = [
+    var.cloud_account_id,
+  ]
+}
+
+run "test_cloud_account_id_rejects_trailing_hyphen" {
+  command = plan
+
+  variables {
+    cloud_account_id                     = "my-cloud-account-"
+    managed_identity_resource_group_name = "my-rg"
+  }
+
+  expect_failures = [
+    var.cloud_account_id,
+  ]
+}
+
+run "test_cloud_account_id_rejects_consecutive_hyphens" {
+  command = plan
+
+  variables {
+    cloud_account_id                     = "my--cloud-account"
+    managed_identity_resource_group_name = "my-rg"
+  }
+
+  expect_failures = [
+    var.cloud_account_id,
+  ]
+}
